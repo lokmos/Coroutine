@@ -108,7 +108,7 @@ private:
     // 协程函数
     std::function<void()> m_cb;
     // 是否参与调度器调度
-    bool m_run_in_scheduler;
+    bool m_runInScheduler;
 };
 
 }
