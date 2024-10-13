@@ -125,6 +125,7 @@ void Scheduler::run() {
 
         // 3.执行任务
         if (task.fiber) {
+            // resume协程，返回时，要么执行完了，要么yield了，总之都看作任务完成
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
                 if (task.fiber->getState() != Fiber::TERM)
@@ -145,6 +146,7 @@ void Scheduler::run() {
         }
         // 4.如果没有任务，执行空闲协程
         else {
+            // 如果调度器没有调度任务，那么idle协程会不停地resume/yield，不会结束，如果idle协程结束了，那⼀定是调度器停⽌了
             if (idle_fiber->getState() == Fiber::TERM) {
                 break;
             }
